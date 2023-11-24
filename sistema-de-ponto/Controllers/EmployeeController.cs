@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using sistema_de_ponto.Data;
+using sistema_de_ponto.Data.DTOs;
 
 namespace sistema_de_ponto.Controllers;
 
@@ -13,8 +14,11 @@ public class EmployeeController : ControllerBase
     {
         _context = context;
     }
-    
-    
+
+    public IActionResult AddEmployee(CreateEmployeeDTO employeeDto)
+    {
+        
+    }
     
     
 }
