@@ -35,8 +35,8 @@ public class EmployeeController : ControllerBase
         return _context.Employee;
     }
 
-    [HttpGet]
-    public IActionResult GetEmployee(int id)
+    [HttpGet("{id}")]
+    public IActionResult GetEmployeeWithID(int id)
     {
         Employee employee = _context.Employee.FirstOrDefault(employee => employee.Id == id);
         if (employee != null)
