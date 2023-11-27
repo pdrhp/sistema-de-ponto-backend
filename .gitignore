@@ -1,7 +1,2 @@
 
 
-bin/
-obj/
-*.dll
-*.exe
-*.pdb
