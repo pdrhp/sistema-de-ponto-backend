@@ -47,3 +47,5 @@ C:\Users\pedro\RiderProjects\sistema-de-ponto\sistema-de-ponto\obj\Debug\net6.0\
 C:\Users\pedro\RiderProjects\sistema-de-ponto\sistema-de-ponto\obj\Debug\net6.0\sistema-de-ponto.pdb
 C:\Users\pedro\RiderProjects\sistema-de-ponto\sistema-de-ponto\obj\Debug\net6.0\sistema-de-ponto.genruntimeconfig.cache
 C:\Users\pedro\RiderProjects\sistema-de-ponto\sistema-de-ponto\obj\Debug\net6.0\ref\sistema-de-ponto.dll
+C:\Users\pedro\RiderProjects\sistema-de-ponto\sistema-de-ponto\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\pedro\RiderProjects\sistema-de-ponto\sistema-de-ponto\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
