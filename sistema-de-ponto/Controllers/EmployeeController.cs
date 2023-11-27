@@ -47,6 +47,19 @@ public class EmployeeController : ControllerBase
 
         return NotFound();
     }
+
+    [HttpDelete]
+    public IActionResult DeleteEmployee(int id)
+    {
+        Employee employee = _context.Employee.FirstOrDefault(employee => employee.Id == id);
+        if (employee != null)
+        {
+            _context.Employee.Remove(employee);
+            _context.SaveChanges();
+        }
+
+        return NotFound();
+    }
     
     
 }
