@@ -29,5 +29,13 @@ public class EmployeeController : ControllerBase
         return Ok(employee);
     }
     
+    [HttpGet]
+    public IEnumerable<Employee> GetAllEmployees()
+    {
+        return _context.Employee;
+    }
+    
+    
+    
     
 }
