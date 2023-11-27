@@ -34,8 +34,18 @@ public class EmployeeController : ControllerBase
     {
         return _context.Employee;
     }
-    
-    
+
+    public IActionResult GetEmployee(int id)
+    {
+        Employee employee = _context.Employee.FirstOrDefault(employee => employee.Id == id);
+        if (employee != null)
+        {
+            ReadEmployeeDTO employeeDto = _mapper.Map<ReadEmployeeDTO>(employee);
+            return Ok(employeeDto);
+        }
+
+        return NotFound();
+    }
     
     
 }
