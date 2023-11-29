@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using sistema_de_ponto.Data;
+using sistema_de_ponto.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,9 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionStringMySql = builder.Configuration.GetConnectionString("connectionStringMysql");
 builder.Services.AddDbContext<SistemaDePontoContext>(opts =>
     opts.UseMySql(connectionStringMySql,
-        ServerVersion.Parse("8.0.21-mysql")));
+        ServerVersion.Parse("8.0.35-mysql")));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
