@@ -47,6 +47,20 @@ public class EmployeeController : ControllerBase
 
         return NotFound();
     }
+    
+    [HttpPut("{id}")]
+    public IActionResult UpdateEmployee(int id, [FromBody] UpdateEmployeeDTO employeeDto)
+    {
+        Employee employee = _context.Employee.FirstOrDefault(employee => employee.Id == id);
+        if (employee == null)
+        {
+            return NotFound();
+        }
+
+        _mapper.Map(employeeDto, employee);
+        _context.SaveChanges();
+        return NoContent();
+    }
 
     [HttpDelete]
     public IActionResult DeleteEmployee(int id)
