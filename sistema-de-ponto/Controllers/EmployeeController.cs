@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using sistema_de_ponto.Data;
 using sistema_de_ponto.Data.DTOs;
 using sistema_de_ponto.Models;
+using sistema_de_ponto.Services;
 
 namespace sistema_de_ponto.Controllers;
 
@@ -10,12 +11,12 @@ namespace sistema_de_ponto.Controllers;
 [Route("[controller]")]
 public class EmployeeController : ControllerBase
 {
-    private SistemaDePontoContext _context;
+    private readonly IEmployeeService _employeeService;
     private IMapper _mapper;
     
-    public EmployeeController(SistemaDePontoContext context, IMapper mapper)
+    public EmployeeController(IEmployeeService employeeEmployeeService, IMapper mapper)
     {
-        _context = context;
+        _employeeService = employeeEmployeeService;
         _mapper = mapper;
     }
 
@@ -24,21 +25,20 @@ public class EmployeeController : ControllerBase
     {
         Employee employee = _mapper.Map<Employee>(employeeDto);
 
-        _context.Employee.Add(employee);
-        _context.SaveChanges();
+        _employeeService.AddEmployee(employee);
         return Ok(employee);
     }
     
     [HttpGet]
     public IEnumerable<Employee> GetAllEmployees()
     {
-        return _context.Employee;
+        return _employeeService.GetAllEmployees();
     }
 
     [HttpGet("{id}")]
     public IActionResult GetEmployeeWithID(int id)
     {
-        Employee employee = _context.Employee.FirstOrDefault(employee => employee.Id == id);
+        Employee employee = _employeeService.GetEmployeeWithID(id);
         if (employee != null)
         {
             ReadEmployeeDTO employeeDto = _mapper.Map<ReadEmployeeDTO>(employee);
@@ -51,25 +51,23 @@ public class EmployeeController : ControllerBase
     [HttpPut("{id}")]
     public IActionResult UpdateEmployee(int id, [FromBody] UpdateEmployeeDTO employeeDto)
     {
-        Employee employee = _context.Employee.FirstOrDefault(employee => employee.Id == id);
+        Employee employee = _employeeService.GetEmployeeWithID(id);
         if (employee == null)
         {
             return NotFound();
         }
 
-        _mapper.Map(employeeDto, employee);
-        _context.SaveChanges();
+        _employeeService.UpdateEmployee(employeeDto, employee);
         return NoContent();
     }
 
     [HttpDelete]
     public IActionResult DeleteEmployee(int id)
     {
-        Employee employee = _context.Employee.FirstOrDefault(employee => employee.Id == id);
+        Employee employee = _employeeService.GetEmployeeWithID(id);
         if (employee != null)
         {
-            _context.Employee.Remove(employee);
-            _context.SaveChanges();
+            _employeeService.DeleteEmployee(employee);
         }
 
         return NotFound();
