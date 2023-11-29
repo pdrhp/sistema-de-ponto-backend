@@ -1,3 +1,14 @@
+*.user
+*.suo
+*.userprefs
+bin/
+obj/
+.vs/
+packages/
+*.log
+*.bak
+.idea/
 *.dll
+*.exe
 *.pdb
-
+*.cache
