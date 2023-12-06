@@ -8,10 +8,9 @@ namespace sistema_de_ponto.Controllers;
 [Route("[controller]")]
 public class TimeRecordController : ControllerBase
 {
-
     private readonly IEmployeeService _employeeService;
     private readonly ITimeRecordService _timeRecordService;
-    
+
     public TimeRecordController(IEmployeeService employeeService, ITimeRecordService timeRecordService)
     {
         _employeeService = employeeService;
@@ -21,23 +20,63 @@ public class TimeRecordController : ControllerBase
     [HttpPost("RecordEntry/{employeeId}")]
     public ActionResult RecordEntry(int employeeId)
     {
-        var employee = _employeeService.GetEmployeeWithID(employeeId);
-        if (employee == null)
+        try
         {
-            return NotFound("Employee not found");    
+            var employee = _employeeService.GetEmployeeWithID(employeeId);
+            if (employee == null)
+            {
+                return NotFound("Employee not found");
+            }
+
+            var timeRecord = new TimeRecord
+            {
+                EmployeeId = employee.Id,
+                Employee = employee,
+                EntryTime = DateTime.Now
+            };
+
+            _timeRecordService.AddTimeRecord(timeRecord);
+
+            return Ok(timeRecord);
         }
-
-        var timeRecord = new TimeRecord
+        catch (Exception ex)
         {
-            EmployeeId = employee.Id,
-            Employee = employee,
-            EntryTime = DateTime.Now
-        };
-        
-        _timeRecordService.AddTimeRecord(timeRecord);
-
-        return Ok(timeRecord);
+            return BadRequest(ex.Message);
+        }
     }
-    
-    
+
+    [HttpPut("RecordLeave/{employeeId}")]
+    public ActionResult RecordLeave(int employeeId)
+    {
+        try
+        {
+            var employee = _employeeService.GetEmployeeWithID(employeeId);
+            if (employee == null)
+            {
+                return NotFound("Employee not found");
+            }
+
+            var timeRecord = _timeRecordService.GetLatestTimeRecordForEmployee(employeeId);
+            if (timeRecord == null)
+            {
+                return NotFound("No entry record found for this employee");
+            }
+
+            timeRecord.LeaveTime = DateTime.Now;
+            _timeRecordService.UpdateTimeRecord(timeRecord);
+
+            return Ok(timeRecord);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet]
+    public ActionResult GetAllTimeRecords()
+    {
+        var timeRecords = _timeRecordService.GetAllTimeRecords();
+        return Ok(timeRecords);
+    }
 }

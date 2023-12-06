@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using sistema_de_ponto.Data;
 using sistema_de_ponto.Models;
 
@@ -20,22 +21,44 @@ public class TimeRecordService : ITimeRecordService
     
     public void AddTimeRecord(TimeRecord timeRecord)
     {
+        var existingRecord = _context.TimeRecord.FirstOrDefault(tr => tr.EmployeeId == timeRecord.EmployeeId && tr.LeaveTime == null);
+
+        if (existingRecord != null)
+        {
+            throw new Exception("An entry record already exists for this employee without a leave time.");
+        }
+        
         _context.TimeRecord.Add(timeRecord);
         _context.SaveChanges();
     }
 
-    public TimeRecord GetLatestTimeRecordForEmployee(int employeeId)
+    public TimeRecord? GetLatestTimeRecordForEmployee(int employeeId)
     {
-        throw new NotImplementedException();
+        return _context.TimeRecord
+            .Where(tr => tr.Employee.Id == employeeId)
+            .OrderByDescending(tr => tr.EntryTime)
+            .FirstOrDefault();
     }
 
     public void UpdateTimeRecord(TimeRecord timeRecord)
     {
-        throw new NotImplementedException();
+        var existingRecord = _context.TimeRecord
+            .FirstOrDefault(tr => tr.RecordId == timeRecord.RecordId);
+        
+        if (existingRecord != null && existingRecord.LeaveTime != null)
+        {
+            throw new Exception("The leave time for this record has already been set.");
+        }
+        
+        
+        _context.TimeRecord.Update(timeRecord);
+        _context.SaveChanges();
     }
 
     public IEnumerable<TimeRecord> GetAllTimeRecords()
     {
-        throw new NotImplementedException();
+        return _context.TimeRecord
+            .Include(tr => tr.Employee)
+            .ToList();
     }
 }
