@@ -16,7 +16,7 @@ public class TimeRecord
     public Employee Employee { get; set; }
     [Required(ErrorMessage = "O campo data de entrada é obrigatorio")]
     public DateTime EntryTime { get; set; }
-    [Required(ErrorMessage = "O campo data de saida é obrigatorio")]
+    
     public DateTime LeaveTime { get; set; }
     
 }
